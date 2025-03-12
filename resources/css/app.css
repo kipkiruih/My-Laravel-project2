@@ -1,0 +1,11 @@
+.card {
+    border-radius: 10px;
+}
+
+.form-control {
+    border-radius: 5px;
+}
+
+.btn-outline-secondary {
+    cursor: pointer;
+}
