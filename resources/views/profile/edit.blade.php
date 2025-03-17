@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-lg border-0 rounded-lg">
-                <div class="card-header bg-emerald text-white text-center">
+                <div class="card-header bg-royal-blue text-white text-center">
                     <h4><i class="fas fa-user-edit"></i> Update Profile</h4>
                 </div>
 
@@ -31,37 +31,37 @@
 
                         <!-- Name -->
                         <div class="mb-3">
-                            <label class="form-label text-emerald"><i class="fas fa-user"></i> Name</label>
-                            <input type="text" name="name" class="form-control border-warm-gray" value="{{ Auth::user()->name }}" required>
+                            <label class="form-label text-warm-gray"><i class="fas fa-user"></i> Name</label>
+                            <input type="text" name="name" class="form-control border-royal-blue" value="{{ Auth::user()->name }}" required>
                         </div>
 
                         <!-- Email -->
                         <div class="mb-3">
-                            <label class="form-label text-emerald"><i class="fas fa-envelope"></i> Email</label>
-                            <input type="email" name="email" class="form-control border-warm-gray" value="{{ Auth::user()->email }}" required>
+                            <label class="form-label text-warm-gray"><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" name="email" class="form-control border-royal-blue" value="{{ Auth::user()->email }}" required>
                         </div>
 
                         <!-- Phone -->
                         <div class="mb-3">
-                            <label class="form-label text-emerald"><i class="fas fa-phone"></i> Phone</label>
-                            <input type="text" name="phone" class="form-control border-warm-gray" value="{{ Auth::user()->phone }}" required>
+                            <label class="form-label text-warm-gray"><i class="fas fa-phone"></i> Phone</label>
+                            <input type="text" name="phone" class="form-control border-royal-blue" value="{{ Auth::user()->phone }}" required>
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
-                            <label class="form-label text-emerald"><i class="fas fa-lock"></i> New Password (Leave blank if not changing)</label>
-                            <input type="password" name="password" class="form-control border-warm-gray">
+                            <label class="form-label text-warm-gray"><i class="fas fa-lock"></i> New Password (Leave blank if not changing)</label>
+                            <input type="password" name="password" class="form-control border-royal-blue">
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-3">
-                            <label class="form-label text-emerald"><i class="fas fa-key"></i> Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="form-control border-warm-gray">
+                            <label class="form-label text-warm-gray"><i class="fas fa-key"></i> Confirm Password</label>
+                            <input type="password" name="password_confirmation" class="form-control border-royal-blue">
                         </div>
 
                         <!-- Submit Button -->
                         <div class="text-center">
-                            <button type="submit" class="btn btn-gold">
+                            <button type="submit" class="btn btn-warm-gray">
                                 <i class="fas fa-save"></i> Save Changes
                             </button>
                         </div>
@@ -75,12 +75,16 @@
 
 <!-- Custom Styles -->
 <style>
-    .bg-emerald { background-color: #2ECC71 !important; }
-    .text-emerald { color: #2ECC71 !important; }
-    .border-warm-gray { border-color: #7F8C8D !important; }
-    .btn-gold { background-color: #F4A62A !important; color: white; }
-    .btn-gold:hover { background-color: #d88a1f !important; }
-    .btn-outline-warm-gray { border: 1px solid #7F8C8D; color: #7F8C8D; }
-    .btn-outline-warm-gray:hover { background-color: #7F8C8D; color: white; }
+    .bg-royal-blue { background-color: #2C3E50 !important; } /* Header Background */
+    .text-warm-gray { color: #7F8C8D !important; } /* Labels */
+    .border-royal-blue { border-color: #2C3E50 !important; } /* Input Borders */
+    
+    /* Submit Button */
+    .btn-warm-gray { background-color: #7F8C8D !important; color: white; }
+    .btn-warm-gray:hover { background-color: #5c6769 !important; color: white !important; } /* Darker Warm Gray */
+    
+    /* Outline Button */
+    .btn-outline-warm-gray { border: 1px solid #7F8C8D; color: #7F8C8D; background: transparent; }
+    .btn-outline-warm-gray:hover { background-color: #2C3E50 !important; color: white !important; } /* Royal Blue Hover */
 </style>
 @endsection

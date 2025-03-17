@@ -17,17 +17,36 @@ use App\Http\Controllers\Tenant\ReviewController;
 use App\Http\Controllers\Owner\ReviewReplyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\HomeController;
+
+Auth::routes();
 
 
 
 
+/*Route::get('/', function () {
+  return view('home');
+});*/
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/', function () {
-    return view('home');
-});
 
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
-Route::get('/', [PropertyController::class, 'home']);
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
+
+//Route::get('/', [PropertyController::class, 'home']);
+
+Route::get('/blog', [BlogController::class, 'index'])->name('home');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog', [BlogController::class, 'blogIndex'])->name('blog.index');
 
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
@@ -127,7 +146,11 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
     Route::get('tenants/{tenant}', [\App\Http\Controllers\Owner\TenantController::class, 'show'])->name('tenants.show');
     Route::delete('tenants/{tenant}', [\App\Http\Controllers\Owner\TenantController::class, 'destroy'])->name('tenants.destroy');
 
-    Route::get('/tenants/create', [\App\Http\Controllers\Owner\TenantController::class, 'create'])->name('tenants.create');
+   
+   // Route::get('/owner/tenants/create', [\App\Http\Controllers\Owner\TenantController::class, 'create'])->name('tenants.create');
+    Route::get('/owner/tenants/add', [\App\Http\Controllers\Owner\TenantController::class, 'create'])->name('tenants.add');
+
+
 Route::post('/tenants', [\App\Http\Controllers\Owner\TenantController::class, 'store'])->name('tenants.store');
 Route::get('/tenants/{id}/edit', [\App\Http\Controllers\Owner\TenantController::class, 'edit'])->name('tenants.edit');
 Route::put('/tenants/{id}', [\App\Http\Controllers\Owner\TenantController::class, 'update'])->name('tenants.update');
@@ -164,7 +187,6 @@ Route::middleware(['auth', 'role:tenant'])
     //});
     
 
-Auth::routes();
 
 
 Route::get('/notifications/read/{id}', function ($id) {

@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-dark fw-bold">
-            <i class="fas fa-file-alt text-primary"></i> My Rental Applications
+            <i class="fas fa-file-alt" style="color: #2C3E50;"></i> My Rental Applications
         </h2>
 
         <!-- Apply for Rental Button -->
@@ -26,7 +26,7 @@
     <div class="card shadow-lg border-0 rounded-4">
         <div class="card-body p-4">
             <table class="table table-hover align-middle">
-                <thead class="text-white" style="background-color: #F4A62A;">
+                <thead class="text-white" style="background-color: #2C3E50;">
                     <tr>
                         <th>#</th>
                         <th><i class="fas fa-home"></i> Property</th>
@@ -61,7 +61,8 @@
                             <div class="btn-group" role="group">
                                 <!-- View Button -->
                                 <a href="{{ route('tenant.rental_applications.show', $application->id) }}" 
-                                   class="btn btn-info btn-sm text-white fw-bold shadow-sm">
+                                   class="btn text-white fw-bold shadow-sm"
+                                   style="background-color: #2C3E50;">
                                     <i class="fas fa-eye"></i> 
                                 </a>
                                 

@@ -2,75 +2,121 @@
 
 @section('content')
 
-<style>
-    .text-primary {
-        color: #2ECC71 !important; /* Emerald Green for headings */
-    }
-    .btn-primary {
-        background-color: #2ECC71 !important; /* Emerald Green buttons */
-        border-color: #2ECC71 !important;
-    }
-    .btn-warning {
-        background-color: #7F8C8D !important; /* Warm Gray for bookmark button */
-        border-color: #7F8C8D !important;
-    }
-    .btn-warning:hover {
-        background-color: #2ECC71 !important; /* Emerald Green on hover */
-        border-color: #2ECC71 !important;
-    }
-    .form-control {
-        border-color: #7F8C8D !important; /* Warm Gray for input fields */
-    }
-    .form-control:focus {
-        border-color: #2ECC71 !important; /* Emerald Green on focus */
-        box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
-    }
-    .card {
-        border-radius: 12px;
-        overflow: hidden;
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    }
-    .card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-    .card-img-top {
-        height: 200px;
-        object-fit: cover;
-    }
-    .card-body {
-        text-align: center;
-    }
-    .row .col-md-4 {
-        display: flex;
-    }
-    .card {
-        flex: 1;
-    }
+<style>.text-primary {
+    color: #2C3E50 !important; /* Royal Blue for headings */
+}
+.btn-primary {
+    background-color: #2C3E50 !important; /* Royal Blue buttons */
+    border-color: #2C3E50 !important;
+}
+.btn-primary:hover {
+    background-color: #F4A62A !important; /* Gold on hover */
+    border-color: #F4A62A !important;
+}
+.btn-warning {
+    background-color: #F4A62A !important; /* Gold for bookmark button */
+    border-color: #F4A62A !important;
+}
+.btn-warning:hover {
+    background-color: #2C3E50 !important; /* Royal Blue on hover */
+    border-color: #2C3E50 !important;
+}
+.btn-outline-primary {
+    color: #2C3E50 !important;
+    border-color: #2C3E50 !important;
+}
+.btn-outline-primary:hover {
+    background-color: #2C3E50 !important;
+    color: white !important;
+}
+.form-control {
+    border-color: #7F8C8D !important; /* Warm Gray for input fields */
+}
+.form-control:focus {
+    border-color: #2C3E50 !important; /* Royal Blue on focus */
+    box-shadow: 0 0 5px rgba(44, 62, 80, 0.5);
+}
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+.card-body {
+    text-align: center;
+}
+.pagination .page-link {
+    color: #2C3E50 !important;
+    border-color: #2C3E50 !important;
+}
+.pagination .page-item.active .page-link {
+    background-color: #2C3E50 !important;
+    border-color: #2C3E50 !important;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure all cards take full height */
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card-body {
+    flex: 1; /* Makes card body take up available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.row .col-md-4 {
+    display: flex;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
 </style>
 
 <div class="container mt-4">
-    <h2 class="text-primary"><i class="fas fa-home"></i> Properties Listing</h2>
+    <h2 class="text-primary text-center"><i class="fas fa-building"></i> Properties Listing</h2>
+    <p class="text-muted text-center">Find the perfect home that suits your lifestyle.</p>
 
     <!-- Search & Filter -->
     <form method="GET" action="{{ route('properties.index') }}" class="mb-4">
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-4">
-                <input type="text" name="search" class="form-control" placeholder="Search by title..." value="{{ request('search') }}">
+                <input type="text" name="search" class="form-control" placeholder="🔍 Search by title..." value="{{ request('search') }}">
             </div>
             <div class="col-md-3">
                 <select name="category" class="form-control">
-                    <option value="" style="color: #2ECC71; font-weight: bold;">All Categories</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="House">House</option>
-                    <option value="Land">Land</option>
+                    <option value="">🏡 All Categories</option>
+                    <option value="Apartment">🏢 Apartment</option>
+                    <option value="House">🏠 House</option>
+                    <option value="Land">🌿 Land</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <input type="text" name="location" class="form-control" placeholder="Location..." value="{{ request('location') }}">
+                <input type="text" name="location" class="form-control" placeholder="📍 Location..." value="{{ request('location') }}">
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search"></i> Search</button>
             </div>
         </div>
     </form>
@@ -80,28 +126,33 @@
         @foreach($properties as $property)
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
-                    <img src="{{ asset('storage/' . $property->image) }}" class="card-img-top" alt="Property">
+                    <img src="{{ asset('storage/' . $property->image) }}" class="card-img-top" alt="{{ $property->title }}">
                     <div class="card-body">
-                        <h5 class="card-title">{{ $property->title }}</h5>
-                        <p class="text-muted">{{ $property->location }}</p>
-                        <p class="text-success">Ksh {{ number_format($property->price, 2) }}</p>
-                        <form action="{{ route('tenant.bookmarks.store') }}" method="POST" class="d-inline">
-                            @csrf
-                            <input type="hidden" name="property_id" value="{{ $property->id }}">
-                            @php
-                                $isBookmarked = in_array($property->id, $bookmarkedProperties ?? []);
-                            @endphp
-                            <button type="submit" class="btn btn-warning">
-                                <i class="fas fa-bookmark"></i> {{ $isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-                            </button>
-                        </form>
-                        <form action="{{ route('tenant.favorites.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="property_id" value="{{ $property->id }}">
-                            <button class="btn btn-outline-primary"><i class="fas fa-heart"></i> Add to Favorites</button>
-                        </form>
-                        <hr>                        
-                        <a href="{{ route('properties.show', $property->id) }}" class="btn btn-primary">
+                        <h5 class="card-title"><i class="fas fa-home text-primary"></i> {{ $property->title }}</h5>
+                        <p class="text-muted"><i class="fas fa-map-marker-alt text-danger"></i> {{ $property->location }}</p>
+                        <p class="text-success fw-bold"><i class="fas fa-dollar-sign"></i> Ksh {{ number_format($property->price, 2) }}</p>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <form action="{{ route('tenant.bookmarks.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="property_id" value="{{ $property->id }}">
+                                @php
+                                    $isBookmarked = in_array($property->id, $bookmarkedProperties ?? []);
+                                @endphp
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-bookmark"></i> {{ $isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+                                </button>
+                            </form>
+                            <form action="{{ route('tenant.favorites.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="property_id" value="{{ $property->id }}">
+                                <button class="btn btn-outline-primary"><i class="fas fa-heart"></i> Add to Favorites</button>
+                            </form>
+                        </div>
+
+                        <hr>
+
+                        <a href="{{ route('properties.show', $property->id) }}" class="btn btn-primary w-100">
                             <i class="fas fa-eye"></i> View Details
                         </a>
                     </div>
@@ -110,6 +161,10 @@
         @endforeach
     </div>
 
-    {{ $properties->links() }}
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+        {{ $properties->links() }}
+    </div>
 </div>
+
 @endsection

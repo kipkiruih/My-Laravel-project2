@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bingwa Homes</title>
-       <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+
+    <!--<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">-->
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+       <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
        @vite(['resources/css/app.css','resources/js/app.js'])
 
@@ -48,11 +51,29 @@
 
             
                 @guest
+
+                
+
                 <li>
                     <a class="nav-link fw-semibold" href="{{ url('/properties') }}" style="color: #2C3E50;">
                         <i class="fa-solid fa-building"></i> Properties
                     </a>
                 </li>
+
+                <!--About us -->
+                
+                <li>
+                    <a class="nav-link fw-semibold" href="{{ url('/about') }}" style="color: #2C3E50;">
+                        <i class="fa-solid fa-address-card"></i> About Us
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link fw-semibold" href="{{ url('/contact') }}" style="color: #2C3E50;">
+                        <i class="fa-solid fa-envelope"></i> Contact Us
+                    </a>
+                </li>
+
                     <li class="nav-item">
                         <a class="nav-link fw-semibold" href="{{ route('login') }}" style="color: #2C3E50;">
                             <i class="fa-solid fa-sign-in-alt"></i> Login
@@ -109,7 +130,7 @@
 <style>
     /* Active link */
     .nav-link.active, .nav-link:hover {
-        color: #F4A62A !important; /* Gold hover effect */
+        color: #2ECC71 !important; /* Gold hover effect */
         border-bottom: 3px solid #F4A62A; /* Gold underline */
     }
 
@@ -140,5 +161,5 @@
         <p>&copy; {{ date('Y') }} Bingwa Homes. All Rights Reserved.</p>
     </footer>
 
-    </body>
+    
 </html>

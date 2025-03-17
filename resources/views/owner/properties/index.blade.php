@@ -3,22 +3,22 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="text-primary"><i class="fas fa-building"></i> My Properties</h3>
-        <a href="{{ route('owner.properties.create') }}" class="btn btn-success"><i class="fas fa-plus"></i> Add New Property</a>
+        <h3 class="text-dark"><i class="fas fa-building"></i> My Properties</h3>
+        <a href="{{ route('owner.properties.create') }}" class="btn btn-dark"><i class="fas fa-plus"></i> Add New Property</a>
     </div>
-
 
     <!-- Search Bar -->
     <form action="{{ route('owner.properties.index') }}" method="GET" class="mb-3">
         <div class="input-group">
             <input type="text" name="search" class="form-control border-secondary" placeholder="Search properties..." value="{{ request('search') }}">
-            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Search</button>
+            <button class="btn btn-dark" type="submit"><i class="fas fa-search"></i> Search</button>
         </div>
     </form>
+
     <div class="card shadow-sm p-3">
         <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle">
-                <thead class="bg-primary text-white">
+            <table class="table table-hover align-middle">
+                <thead class="bg-dark text-white">
                     <tr>
                         <th>No.</th>
                         <th><i class="fas fa-home"></i> Title</th>
@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
                     @forelse ($properties as $index => $property)
-                    <tr>
+                    <tr class="table-light">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $property->title }}</td>
                         <td>{{ $property->location }}</td>
@@ -49,11 +49,11 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <a href="{{ route('owner.properties.edit', $property->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="{{ route('owner.properties.edit', $property->id) }}" class="btn btn-outline-dark btn-sm"><i class="fas fa-edit"></i> Edit</a>
                             <form action="{{ route('owner.properties.destroy', $property->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this property?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Delete</button>
+                                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i> Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -67,4 +67,19 @@
         </div>
     </div>
 </div>
+
+<!-- Custom Styling -->
+<style>
+    .btn-dark:hover {
+        background-color: #575d63 !important; /* Lighter shade for hover */
+    }
+    .btn-outline-dark:hover {
+        background-color: #343a40 !important;
+        color: white !important;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa !important; /* Light hover effect */
+    }
+</style>
+
 @endsection

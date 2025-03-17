@@ -58,6 +58,7 @@ class PaymentController extends Controller
     {
         Payment::create([
             'tenant_id' => auth()->id(),
+            'property_id' => $request->property_id,
             'transaction_id' => $request->transaction_id,
             'amount' => $request->amount,
             'status' => 'completed'
@@ -77,12 +78,14 @@ class PaymentController extends Controller
                 'required',
                 'regex:/^(?:07\d{8}|011\d{7}|2547\d{8}|25411\d{7})$/',
                 'numeric'
-            ]
+            ],
+            'property_id' => 'required|exists:properties,id'
         ]);
 
         // Here you would integrate with M-Pesa API
         Payment::create([
             'tenant_id' => Auth::id(),
+            'property_id' => $request->property_id,
             'transaction_id' => 'MPESA-' . rand(5000, 999999),
             'amount' => $request->amount,
             'status' => 'completed',

@@ -65,9 +65,9 @@ class PropertyController extends Controller
     /**
      * Display the homepage with the latest 6 properties.
      */
-    public function home()
-    {
-        $properties = Property::latest()->take(6)->get(); // Get latest 6 properties
+  /*public function home()
+  {
+    $properties = Property::latest()->take(6)->get(); // Get latest 6 properties
         return view('home', compact('properties'));
-    }
+    }*/
 }

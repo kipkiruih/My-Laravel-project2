@@ -119,7 +119,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="sidebar-link">
+                            <a href="{{route('owner.tenants.index')}}" class="sidebar-link">
                                 <i class="fas fa-users"></i> Manage Tenants
                             </a>
                         </li>

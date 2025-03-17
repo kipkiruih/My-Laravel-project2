@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class TenantController extends Controller
 {
@@ -26,16 +27,16 @@ class TenantController extends Controller
         $tenant->delete();
         return redirect()->route('owner.tenants.index')->with('success', 'Tenant removed successfully.');
     }
-    public function create()
+    /*public function create()
     {
-        return view('owner.tenants.create');
-    }
+        return view('owner.tenants.add');
+    }*/
 
     /**
      * Store a newly created tenant in the database.
      */
    
-public function store(Request $request)
+/*public function store(Request $request)
 {
     // Validate request
     $request->validate([
@@ -69,8 +70,54 @@ public function store(Request $request)
         'address' => $request->address,
     ]);
 
-    return redirect()->route('owner.tenants.index')->with('success', 'Tenant added successfully!');
-}
+    return redirect()->route('tenants.add')->with('success', 'Tenant added successfully!');
+}*/
+
+public function create()
+    {
+        return view('owner.tenants.add');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|max:15|unique:tenants,phone',
+            'password' => 'required|min:6|confirmed',
+            'address' => 'nullable|string|max:255',
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+        ]);
+
+
+        // Handle profile image upload
+    $profileImagePath = null;
+    if ($request->hasFile('profile_image')) {
+        $profileImagePath = $request->file('profile_image')->store('profile_pictures', 'public');
+    }
+        DB::transaction(function () use ($request) {
+            // Create user
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'role' => 'tenant',
+                  
+            ]);
+
+            // Create tenant record
+            Tenant::create([
+                'user_id' => $user->id,
+                'phone' => $request->phone,
+                'address' => $request->address,
+            ]);
+        });
+
+        return redirect()->route('owner.tenants.index')->with('success', 'Tenant added successfully!');
+    }
+
 public function update(Request $request, $id)
 {
     $tenant = Tenant::findOrFail($id);

@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Property;
+use App\Models\Blog;
+
 
 use Illuminate\Http\Request;
 
@@ -13,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+      //  $this->middleware('auth');
     }
 
     /**
@@ -22,7 +25,9 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('home');
+    { $blogs = Blog::latest()->take(3)->get(); // Get latest 3 blogs
+        $properties = Property::latest()->take(5)->get(); // Fetch latest 5 properties
+        return view('home', compact('properties','blogs'));
     }
+
 }

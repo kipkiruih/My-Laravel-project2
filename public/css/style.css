@@ -1,0 +1,110 @@
+/* Custom CSS for the application */
+    .text-primary { color: #2C3E50 !important; } /* Royal Blue */
+    .text-warning { color: #F4A62A !important; } /* Gold/Amber */
+    .text-success { color: #2ECC71 !important; } /* Emerald Green */
+    .text-secondary { color: #7F8C8D !important; } /* Cool Gray */
+    .bg-light { background-color: #F8F9FA !important; } /* Warm White *
+/* Hover animation for feature boxes */
+/* Hover animation for feature boxes */
+.feature-box {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feature-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for images */
+.about-img {
+    transition: transform 0.4s ease, box-shadow 0.3s ease;
+}
+.about-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Fade-in text effect */
+.fade-in-text {
+    opacity: 0;
+    animation: fadeIn 1.5s ease-in forwards;
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button hover effect */
+.btn-hover {
+    transition: all 0.3s ease-in-out;
+}
+.btn-hover:hover {
+    background-color: #2C3E50; /* Dark Blue */
+    color: white;
+    transform: scale(1.05);
+}
+
+
+/* Social Media Icons */
+.social-icon {
+    margin-right: 15px;
+    color: #2C3E50; /* Dark Blue */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+.social-icon:hover {
+    transform: scale(1.2);
+    color: #F4A62A; /* Gold */
+}
+
+/* Button Hover Effect */
+
+
+
+/* Contact Card Styling */
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+/* Contact Form Input Fields */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.form-control:focus {
+    border-color: #2ECC71; /* Green */
+    box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+}
+
+/* Blog Card */
+.card {
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Blog Image */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Blog Button Hover */
+.btn-hover {
+    transition: all 0.3s ease-in-out;
+}
+.btn-hover:hover {
+    background-color: #2C3E50;
+    color: white;
+    transform: scale(1.05);
+}
