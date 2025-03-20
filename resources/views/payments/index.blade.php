@@ -4,10 +4,10 @@
 
 @section('content')
 <div class="container mt-5">
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
             <h4><i class="fas fa-receipt"></i> Rent Payment History</h4>
-            <a href="{{ route('payments.pay') }}" class="btn btn-light">
+            <a href="{{ route('payments.pay_rent') }}" class="btn btn-outline-light">
                 <i class="fas fa-wallet"></i> Make Payment
             </a>
         </div>
@@ -15,7 +15,7 @@
             @if($payments->isEmpty())
                 <p class="text-center text-muted">No payments found.</p>
             @else
-                <table class="table table-striped">
+                <table class="table table-hover">
                     <thead class="bg-light">
                         <tr>
                             <th>#</th>
@@ -23,6 +23,7 @@
                             <th>Amount (Ksh)</th>
                             <th>Status</th>
                             <th>Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,10 +41,11 @@
                                 </span>
                             </td>
                             <td>{{ $payment->created_at->format('d M Y, h:i A') }}</td>
-                       
-                            <td><a href="{{ route('payments.invoice', $payment->id) }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-download"></i> Download Invoice
-                            </a></td>
+                            <td>
+                                <a href="{{ route('payments.invoice', $payment->id) }}" class="btn btn-outline-dark btn-sm">
+                                    <i class="fas fa-download"></i> Download Invoice
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

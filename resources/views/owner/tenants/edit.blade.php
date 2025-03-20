@@ -12,7 +12,7 @@
 
                 <!-- Profile Image -->
                 <div class="text-center mb-4">
-                    <img src="{{ $tenant->user->profile_image ? asset('storage/' . $tenant->user->profile_image) : asset('images/default-user.png') }}" 
+                    <img src="{{ $tenant->user->profile_image ? asset('storage/' . $tenant->user->profile_image) : asset('images/default-profile.png') }}" 
                          class="rounded-circle border" width="120" height="120" alt="Tenant Profile">
                 </div>
 
@@ -58,10 +58,10 @@
 
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('owner.tenants.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('owner.tenants.index') }}" class="btn back-btn">
                         <i class="fas fa-arrow-left"></i> Back
                     </a>
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn update-btn">
                         <i class="fas fa-save"></i> Update Tenant
                     </button>
                 </div>
@@ -69,4 +69,29 @@
         </div>
     </div>
 </div>
+
+<!-- Custom Hover Styles -->
+<style>
+    .back-btn {
+        background-color: #7F8C8D;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .back-btn:hover {
+        background-color: #5D6D7E;
+        color: white;
+    }
+
+    .update-btn {
+        background-color: #2C3E50;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .update-btn:hover {
+        background-color: #1A252F;
+        color: white;
+    }
+</style>
 @endsection

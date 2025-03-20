@@ -7,10 +7,10 @@
     <div class="card shadow-sm">
         <div class="card-body text-center">
             <!-- Profile Image -->
-            <img src="{{ $tenant->user->profile_image ? asset('storage/' . $tenant->user->profile_image) : asset('images/default-user.png') }}" 
+            <img src="{{ $tenant->user->profile_image ? asset('storage/' . $tenant->user->profile_image) : asset('images/default-profile.png') }}" 
                  class="rounded-circle border" width="120" height="120" alt="Tenant Profile">
 
-            <h3 class="mt-3">{{ $tenant->user->name }}</h3>
+            <h3 class="mt-3 text-dark">{{ $tenant->user->name }}</h3>
             <p class="text-muted"><i class="fas fa-user-tag"></i> Tenant</p>
 
             <hr>
@@ -29,17 +29,17 @@
             <hr>
 
             <!-- Action Buttons -->
-            <a href="{{ route('owner.tenants.index') }}" class="btn btn-secondary">
+            <a href="{{ route('owner.tenants.index') }}" class="btn" style="background-color: #7F8C8D; color: white;">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
-            <a href="{{ route('owner.tenants.edit', $tenant->id) }}" class="btn btn-primary">
+            <a href="{{ route('owner.tenants.edit', $tenant->id) }}" class="btn" style="background-color: #F4A62A; color: white;">
                 <i class="fas fa-edit"></i> Edit
             </a>
             <form action="{{ route('owner.tenants.destroy', $tenant->id) }}" method="POST" class="d-inline-block" 
                   onsubmit="return confirm('Are you sure you want to delete this tenant?');">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger">
+                <button type="submit" class="btn" style="background-color: #2ECC71; color: white;">
                     <i class="fas fa-trash-alt"></i> Delete
                 </button>
             </form>

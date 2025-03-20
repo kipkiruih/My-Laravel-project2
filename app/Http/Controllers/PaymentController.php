@@ -65,10 +65,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function pay()
-    {
-        return view('payments.pay');
-    }
+   
 
     public function process(Request $request)
     {
@@ -120,4 +117,50 @@ public function dashboard()
 
     return view('tenant.dashboard', compact('totalPayments'));
 }
+
+public function mpesaCallback(Request $request)
+{
+    \Log::info('M-Pesa Callback Data: ' . json_encode($request->all())); // Log data for debugging
+
+    $callbackData = $request->all();
+
+    if (!isset($callbackData['Body']['stkCallback'])) {
+        return response()->json(['error' => 'Invalid Callback Data'], 400);
+    }
+
+    $stkCallback = $callbackData['Body']['stkCallback'];
+    $resultCode = $stkCallback['ResultCode'];
+
+    if ($resultCode == 0) { // Success
+        $metadata = $stkCallback['CallbackMetadata']['Item'];
+
+        $mpesaReceiptNumber = '';
+        $amountPaid = 0;
+        $phoneNumber = '';
+
+        foreach ($metadata as $item) {
+            if ($item['Name'] == 'MpesaReceiptNumber') {
+                $mpesaReceiptNumber = $item['Value'];
+            } elseif ($item['Name'] == 'Amount') {
+                $amountPaid = $item['Value'];
+            } elseif ($item['Name'] == 'PhoneNumber') {
+                $phoneNumber = $item['Value'];
+            }
+        }
+
+        // Save payment record
+        Payment::create([
+            'tenant_id' => Auth::id(), // Ensure the correct tenant ID
+            'property_id' => session('property_id'), // Retrieve from session (set during request)
+            'transaction_id' => $mpesaReceiptNumber,
+            'amount' => $amountPaid,
+            'status' => 'completed',
+        ]);
+
+        return response()->json(['message' => 'Payment recorded successfully'], 200);
+    }
+
+    return response()->json(['error' => 'Payment failed'], 400);
+}
+
 }

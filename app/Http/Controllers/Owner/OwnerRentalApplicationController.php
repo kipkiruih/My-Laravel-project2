@@ -16,6 +16,8 @@ class OwnerRentalApplicationController extends Controller
         $applications = RentalApplication::whereHas('property', function ($query) {
             $query->where('owner_id', auth()->id());
         })->latest()->get();
+        $applications = RentalApplication::with(['tenant', 'property'])->paginate(10);
+
 
         return view('owner.rental_applications.index', compact('applications'));
     }

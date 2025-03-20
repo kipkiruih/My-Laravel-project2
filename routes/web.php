@@ -20,6 +20,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MpesaController;
 
 Auth::routes();
 
@@ -72,12 +73,17 @@ Route::post('/notifications/mark-as-read', [NotificationController::class, 'mark
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index'); // Changed from history
-    Route::get('/payments/pay', [PaymentController::class, 'pay'])->name('payments.pay');
-    Route::post('/payments/process', [PaymentController::class, 'process'])->name('payments.process');
-    Route::post('/payments/initiate', [PaymentController::class, 'initiatePayment'])->name('payments.initiate');
+    Route::get('/payments/pay', [MpesaController::class, 'pay'])->name('payments.pay_rent');
+   // Route::post('/payments/process', [PaymentController::class, 'process'])->name('payments.process');
+    //Route::post('/payments/initiate', [PaymentController::class, 'initiatePayment'])->name('payments.initiate');
 
     Route::get('/payments/invoice/{id}', [PaymentController::class, 'generateInvoice'])->name('payments.invoice');
 
+    Route::post('/mpesa/callback', [PaymentController::class, 'mpesaCallback']);
+
+    Route::post('/mpesa/pay', [MpesaController::class, 'stkPush'])->name('mpesa.pay');
+    Route::post('/mpesa/pay', [MpesaController::class, 'initiatePayment']);
+    Route::post('/mpesa/callback', [MpesaController::class, 'mpesaCallback']);
 });
 
 

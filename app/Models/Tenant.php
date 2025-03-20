@@ -8,7 +8,7 @@ class Tenant extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'national_id', 'address'];
+    protected $fillable = ['user_id', 'national_id', 'address','phone','name'];
 
     public function user()
     {

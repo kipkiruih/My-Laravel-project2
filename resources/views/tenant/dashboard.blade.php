@@ -82,7 +82,7 @@
                             Your next rent payment of <b>KES {{ number_format($upcomingPayment->amount, 2) }}</b> 
                             is due on <b>{{ \Carbon\Carbon::parse($upcomingPayment->due_date)->format('F d, Y') }}</b>.
                         </p>
-                        <a href="{{ route('payments.pay') }}" class="btn text-white" style="background-color: #F4A62A;">
+                        <a href="{{ route('payments.pay_rent') }}" class="btn text-white" style="background-color: #F4A62A;">
                             <i class="fas fa-credit-card"></i> Pay Now
                         </a>
                     @else
