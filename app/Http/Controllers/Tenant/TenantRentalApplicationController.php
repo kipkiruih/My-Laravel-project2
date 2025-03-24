@@ -9,19 +9,21 @@ use App\Models\Property;
 use App\Models\User;
 use App\Notifications\RentalApplicationUpdate;
 use App\Events\RentalApplicationUpdated;
-
-use Illuminate\Support\Facades\Notification;
-
+use App\Models\ActivityLog;
 class TenantRentalApplicationController extends Controller
 {
     public function index()
     {
+        ActivityLog::log('Viewed Rental Applications', 'Tenant #' . auth()->id() . ' viewed their rental applications.');
+
         $applications = RentalApplication::where('tenant_id', auth()->id())->latest()->get();
         return view('tenant.rental_applications.index', compact('applications'));
     }
 
     public function create()
     {
+        ActivityLog::log('Accessed Rental Application Form', 'Tenant #' . auth()->id() . ' accessed the rental application creation page.');
+
         $properties = Property::all();
         return view('tenant.rental_applications.create', compact('properties'));
     }
@@ -33,14 +35,14 @@ class TenantRentalApplicationController extends Controller
             'message' => 'nullable|string|max:1000',
         ]);
 
-        $property = Property::findOrFail($request->property_id);
-
         $rentalApplication = RentalApplication::create([
             'property_id' => $request->property_id,
-            'tenant_id' => auth()->id(), // Assuming tenant is logged in
+            'tenant_id' => auth()->id(),
             'message' => $request->message,
-            'status' => 'Pending', // Default status
+            'status' => 'Pending',
         ]);
+
+        ActivityLog::log('Created Rental Application', 'Tenant #' . auth()->id() . ' submitted a rental application for Property #' . $request->property_id);
 
         return redirect()->route('tenant.rental_applications.index')
             ->with('success', 'Rental application submitted successfully.');
@@ -49,8 +51,11 @@ class TenantRentalApplicationController extends Controller
     public function show(RentalApplication $rentalApplication)
     {
         if ($rentalApplication->tenant_id !== auth()->id()) {
+            ActivityLog::log('Unauthorized Access Attempt', 'Tenant #' . auth()->id() . ' attempted to view unauthorized rental application #' . $rentalApplication->id);
             abort(403);
         }
+
+        ActivityLog::log('Viewed Rental Application', 'Tenant #' . auth()->id() . ' viewed rental application #' . $rentalApplication->id);
 
         return view('tenant.rental_applications.show', compact('rentalApplication'));
     }
@@ -58,17 +63,28 @@ class TenantRentalApplicationController extends Controller
     public function destroy($id)
     {
         $application = RentalApplication::findOrFail($id);
+
+        if ($application->tenant_id !== auth()->id()) {
+            ActivityLog::log('Unauthorized Deletion Attempt', 'Tenant #' . auth()->id() . ' attempted to delete rental application #' . $id);
+            abort(403);
+        }
+
         $application->delete();
 
-        return redirect()->route('tenant.rental_applications.index')->with('success', 'Rental application deleted successfully.');
+        ActivityLog::log('Deleted Rental Application', 'Tenant #' . auth()->id() . ' deleted rental application #' . $id);
+
+        return redirect()->route('tenant.rental_applications.index')
+            ->with('success', 'Rental application deleted successfully.');
     }
 
     public function edit(RentalApplication $rentalApplication)
     {
-        // Ensure only the owner of the application can edit it
         if ($rentalApplication->tenant_id !== auth()->id() || $rentalApplication->status !== 'Pending') {
+            ActivityLog::log('Unauthorized Edit Attempt', 'Tenant #' . auth()->id() . ' attempted to edit rental application #' . $rentalApplication->id);
             abort(403, 'You can only edit pending applications.');
         }
+
+        ActivityLog::log('Accessed Edit Page', 'Tenant #' . auth()->id() . ' accessed the edit page for rental application #' . $rentalApplication->id);
 
         $properties = Property::all();
         return view('tenant.rental_applications.edit', compact('rentalApplication', 'properties'));
@@ -76,8 +92,8 @@ class TenantRentalApplicationController extends Controller
 
     public function update(Request $request, RentalApplication $rentalApplication)
     {
-        // Ensure only the tenant who made the application can update it
         if ($rentalApplication->tenant_id !== auth()->id() || $rentalApplication->status !== 'Pending') {
+            ActivityLog::log('Unauthorized Update Attempt', 'Tenant #' . auth()->id() . ' attempted to update rental application #' . $rentalApplication->id);
             abort(403, 'You can only update pending applications.');
         }
 
@@ -91,14 +107,16 @@ class TenantRentalApplicationController extends Controller
             'message' => $request->message,
         ]);
 
+        ActivityLog::log('Updated Rental Application', 'Tenant #' . auth()->id() . ' updated rental application #' . $rentalApplication->id . ' for Property #' . $request->property_id);
+
         return redirect()->route('tenant.rental_applications.index')
             ->with('success', 'Rental application updated successfully.');
     }
 
-    // Update rental application status
     public function updateStatus(Request $request, $id)
     {
         $application = RentalApplication::findOrFail($id);
+        $oldStatus = $application->status;
         $application->status = $request->status;
         $application->save();
 
@@ -112,6 +130,8 @@ class TenantRentalApplicationController extends Controller
 
         // Broadcast for real-time updates
         broadcast(new RentalApplicationUpdated($application))->toOthers();
+
+        ActivityLog::log('Updated Rental Application Status', 'Tenant #' . auth()->id() . ' changed status of rental application #' . $id . ' from "' . $oldStatus . '" to "' . $request->status . '"');
 
         return redirect()->back()->with('success', 'Application status updated and notifications sent.');
     }

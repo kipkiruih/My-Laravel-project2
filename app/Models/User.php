@@ -82,6 +82,10 @@ public function payments()
 {
     return $this->hasMany(Payment::class, 'tenant_id');
 }
+public function reviews()
+{
+    return $this->hasMany(Review::class);
+}
 
 
 }

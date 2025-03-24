@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,21 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
-    protected $fillable = ['tenant_id', 'property_id', 'review', 'rating'];
 
-    public function tenant()
+    protected $fillable = ['user_id', 'property_id', 'rating', 'review'];
+
+    public $timestamps = true; // Ensure timestamps are enabled
+    public function user()
     {
-        return $this->belongsTo(User::class, 'tenant_id');
+        return $this->belongsTo(User::class);
     }
+public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
 
+    }
+    
     public function property()
     {
         return $this->belongsTo(Property::class);
-    }
-
-    public function replies()
-    {
-        return $this->hasMany(ReviewReply::class);
     }
 }
 

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Tenant\BookmarkController;
 use App\Http\Controllers\PropertyController;
-use App\Http\Controllers\Tenant\RatingController;
 use App\Http\Controllers\Tenant\FavoriteController;
 use App\Http\Controllers\Tenant\ReviewController;
 use App\Http\Controllers\Owner\ReviewReplyController;
@@ -27,9 +26,9 @@ Auth::routes();
 
 
 
-/*Route::get('/', function () {
+Route::get('/home', function () {
   return view('home');
-});*/
+});
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
@@ -113,12 +112,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Reviews
     Route::get('/reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('admin.reviews.index');
-    Route::get('/reviews/{id}', [\App\Http\Controllers\Admin\ReviewController::class, 'show'])->name('admin.reviews.show');
     Route::delete('/reviews/{id}', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 
     //Activities
     
-   // Route::get('/activities', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.activities.index');
+    Route::get('/activities', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.activities.index');
+    Route::delete('/admin/activity-logs/{id}', [\App\Http\Controllers\Admin\ActivityLogController::class, 'destroy'])
+    ->name('admin.activity_logs.destroy');
 
 
     Route::get('/settings', function () {
@@ -131,11 +131,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/security-settings', [\App\Http\Controllers\Admin\SecuritySettingsController::class, 'update'])->name('security-settings.update');
 
 });
-
-
-
-
-
 
 
 
@@ -182,10 +177,14 @@ Route::middleware(['auth', 'role:tenant'])
         Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.store');
         Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
     
-        Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
 
         Route::resource('maintenance', \App\Http\Controllers\Tenant\MaintenanceRequestController::class);
         
+
+        Route::post('/properties/{property}/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('review.edit');
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('review.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('review.destroy');
     });
 
 
@@ -204,11 +203,11 @@ Route::get('/notifications/read/{id}', function ($id) {
     return redirect()->back();
 })->name('notifications.read');
 
-
 Route::middleware(['auth'])->group(function () {
-    Route::post('/reviews', [ReviewController::class, 'store'])->name('tenant.reviews.store');
-    Route::patch('/reviews/{review}', [ReviewController::class, 'update'])->name('tenant.reviews.update');
-    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('tenant.reviews.destroy');
 
-    Route::post('/review-replies', [ReviewReplyController::class, 'store'])->name('owner.review-replies.store');
+    Route::post('/properties/{property}/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('review.edit');
+   
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('review.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('review.destroy');
 });

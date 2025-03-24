@@ -12,11 +12,22 @@ class UserController extends Controller
 {
     
     // Display all users
-    public function index()
-    {
-        $users = User::all();
-        return view('admin.users.index', compact('users'));
+    public function index(Request $request)
+{
+    $query = User::query();
+
+    // Check if a search query exists
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->where('name', 'LIKE', "%{$search}%")
+              ->orWhere('email', 'LIKE', "%{$search}%")
+              ->orWhere('phone', 'LIKE', "%{$search}%");
     }
+
+    $users = $query->orderBy('created_at', 'desc')->paginate(10);
+    $users = User::all();
+    return view('admin.users.index', compact('users'));
+}
 
     // Show edit form
     public function edit($id)

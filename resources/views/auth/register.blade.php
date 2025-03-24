@@ -1,106 +1,123 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh; background-color: #F4F6F7;">
-    <div class="col-md-6 col-lg-5"> <!-- Reduced width -->
-        <div class="card shadow-sm border-0 rounded">
-            <!-- Header -->
-            <div class="card-header text-center" style="background-color: #2C3E50; color: #FFFFFF; padding: 10px;">
-                <h4 class="mb-1"><i class="fas fa-user-plus"></i> Sign Up</h4>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%; border-radius: 10px;">
+        <h2 class="text-center mb-4" style="color: #2C3E50;">Register</h2>
+
+        <!-- Progress Indicator -->
+        <div class="progress mb-3">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 50%; background-color: #F4A62A;">Step 1 of 2</div>
+        </div>
+
+        <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <!-- Step 1: Personal Information -->
+            <div id="step-1">
+                <div class="mb-3">
+                    <label for="name" class="form-label"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="Enter full name">
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Enter email">
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label"><i class="fas fa-phone"></i> Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required placeholder="Enter phone number">
+                </div>
+
+                <div class="mb-3">
+                    <label for="role" class="form-label"><i class="fas fa-user-tag"></i> Role</label>
+                    <select class="form-select" id="role" name="role" required>
+                        <option value="tenant">Tenant</option>
+                        <option value="owner">Owner</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn w-100 next-btn" style="background-color: #2ECC71; color: white;">Next</button>
             </div>
 
-            <!-- Registration Form -->
-            <div class="card-body p-3"> <!-- Reduced padding -->
-                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
-                    @csrf
+            <!-- Step 2: Profile & Password Setup -->
+            <div id="step-2" style="display: none;">
+                <div class="mb-3">
+                    <label for="profile_image" class="form-label"><i class="fas fa-image"></i> Profile Image</label>
+                    <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
+                </div>
 
-                    <!-- Name -->
-                    <div class="form-group mb-2">
-                        <label for="name" class="form-label"><i class="fas fa-user"></i> Name</label>
-                        <input id="name" type="text" class="form-control form-control-sm @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus>
-                        @error('name') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
-                    </div>
-
-                    <!-- Email -->
-                    <div class="form-group mb-2">
-                        <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email</label>
-                        <input id="email" type="email" class="form-control form-control-sm @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required>
-                        @error('email') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="form-group mb-2">
-                        <label for="phone" class="form-label"><i class="fas fa-phone"></i> Phone</label>
-                        <input id="phone" type="text" class="form-control form-control-sm @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required>
-                        @error('phone') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
-                    </div>
-
-                    <!-- Role -->
-                    <div class="form-group mb-2">
-                        <label for="role" class="form-label"><i class="fas fa-user-tag"></i> Role</label>
-                        <select id="role" class="form-control form-control-sm @error('role') is-invalid @enderror" name="role" required>
-                            <option value="">Select Role</option>
-                            <option value="tenant">Tenant</option>
-                            <option value="owner">Property Owner</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                        @error('role') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
-                    </div>
-
-                    <!-- Profile Image -->
-                    <div class="form-group mb-2">
-                        <label for="profile_image" class="form-label"><i class="fas fa-image"></i> Profile Image</label>
-                        <input id="profile_image" type="file" class="form-control form-control-sm @error('profile_image') is-invalid @enderror" name="profile_image">
-                        @error('profile_image') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
-                    </div>
-
-                    <!-- Password -->
-                    <div class="form-group mb-2">
-                        <label for="password" class="form-label"><i class="fas fa-lock"></i> Password</label>
-                        <input id="password" type="password" class="form-control form-control-sm @error('password') is-invalid @enderror" name="password" required>
-                        @error('password') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
-                    </div>
-
-                    <!-- Confirm Password -->
-                    <div class="form-group mb-3">
-                        <label for="password-confirm" class="form-label"><i class="fas fa-lock"></i> Confirm Password</label>
-                        <input id="password-confirm" type="password" class="form-control form-control-sm" name="password_confirmation" required>
-                    </div>
-
-                    <!-- Register Button -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn register-btn">
-                            <i class="fas fa-user-plus"></i> Register
+                <div class="mb-3 position-relative">
+                    <label for="password" class="form-label"><i class="fas fa-lock"></i> Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Enter password">
+                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                            <i class="fas fa-eye"></i>
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
 
-            <!-- Footer -->
-            <div class="card-footer text-center small p-2">
-                Already have an account? <a href="{{ route('login') }}" class="text-primary">Login</a>
+                <div class="mb-3 position-relative">
+                    <label for="password_confirmation" class="form-label"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required placeholder="Confirm password">
+                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn w-100 back-btn" style="background-color: #7F8C8D; color: white;">Back</button>
+                <button type="submit" class="btn w-100 mt-2" style="background-color: #F4A62A; color: white;">Register</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 
-<!-- Custom Hover Effect -->
-<style>
-    .register-btn {
-        background-color: #2ECC71; /* Emerald Green */
-        color: white;
-        font-size: 0.9rem;
-        padding: 8px;
-        border: none;
-        border-radius: 5px;
-        transition: all 0.3s ease-in-out;
-    }
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let step1 = document.getElementById("step-1");
+        let step2 = document.getElementById("step-2");
+        let progressBar = document.getElementById("progress-bar");
 
-    .register-btn:hover {
-        background-color: #27AE60; /* Darker Green */
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-        transform: translateY(-2px);
-    }
-</style>
+        document.querySelector(".next-btn").addEventListener("click", function() {
+            step1.style.display = "none";
+            step2.style.display = "block";
+            progressBar.style.width = "100%";
+            progressBar.textContent = "Step 2 of 2";
+        });
+
+        document.querySelector(".back-btn").addEventListener("click", function() {
+            step1.style.display = "block";
+            step2.style.display = "none";
+            progressBar.style.width = "50%";
+            progressBar.textContent = "Step 1 of 2";
+        });
+
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function () {
+                let input = this.previousElementSibling;
+                if (input.type === "password") {
+                    input.type = "text";
+                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    input.type = "password";
+                    this.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

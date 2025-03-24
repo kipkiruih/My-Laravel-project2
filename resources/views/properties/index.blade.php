@@ -152,6 +152,18 @@
 
                         <hr>
 
+                        <div class="d-flex align-items-center justify-content-center">
+                            @php
+                                $averageRating = round($property->averageRating() ?? 0, 1);
+                            @endphp
+                            <span class="text-warning">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star{{ $i <= $averageRating ? '' : '-o' }}"></i>
+                                @endfor
+                            </span>
+                            <span class="ms-2 text-muted">({{ $averageRating }}/5)</span>
+                        </div>
+                        
                         <a href="{{ route('properties.show', $property->id) }}" class="btn btn-primary w-100">
                             <i class="fas fa-eye"></i> View Details
                         </a>

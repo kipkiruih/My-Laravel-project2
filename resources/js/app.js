@@ -1,4 +1,7 @@
 import './bootstrap';
+import $ from 'jquery';
+window.$ = window.jQuery = $;
+
 
 document.addEventListener("DOMContentLoaded", function () {
     Echo.channel('notifications')

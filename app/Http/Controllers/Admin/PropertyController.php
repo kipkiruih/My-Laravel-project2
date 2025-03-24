@@ -9,11 +9,29 @@ use App\Models\Property;
 class PropertyController extends Controller
 {
     // Display all properties
-    public function index()
-    {
-        $properties = Property::all();
-        return view('admin.properties.index', compact('properties'));
+    public function index(Request $request)
+{
+    $query = Property::query()->with('owner');
+
+    // Searching
+    if ($request->has('search')) {
+        $search = $request->search;
+        $query->where('title', 'like', "%{$search}%")
+              ->orWhereHas('owner', function ($q) use ($search) {
+                  $q->where('name', 'like', "%{$search}%");
+              })
+              ->orWhere('property_type', 'like', "%{$search}%");
     }
+
+    // Sorting
+    $sortColumn = $request->get('sort', 'title'); // Default sort by title
+    $sortDirection = $request->get('direction', 'asc'); // Default direction ascending
+
+    $properties = $query->orderBy($sortColumn, $sortDirection)->paginate(10);
+
+    return view('admin.properties.index', compact('properties', 'sortColumn', 'sortDirection'));
+}
+
 
     // Show edit form
     public function edit($id)

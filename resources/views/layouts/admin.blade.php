@@ -3,24 +3,28 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard | {{ config('app.name', 'Bingwa Homes') }}</title>
+    <title>Admin Panel | {{ config('app.name', 'Bingwa Homes') }}</title>
 
     <!-- Bootstrap & FontAwesome -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- CSRF Token -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 </head>
 <body>
     <div id="app">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg" style="background-color: #2C3E50; padding: 10px;">
+        <!-- Static Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
+                <!-- Sidebar Toggle Button -->
+                <button class="sidebar-toggle d-md-none" type="button" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
                 <!-- Logo -->
-                <a class="navbar-brand text-white fw-bold" href="#">
-                    <i class="fas fa-user-shield" style="color: #F4A62A;"></i> Admin Panel
+                <a class="navbar-brand text-white fw-bold" href="{{ route('home') }}">
+                    <i class="fas fa-home" style="color: #F4A62A;"></i> Bingwa Homes
                 </a>
 
                 <!-- Mobile Menu Toggle -->
@@ -33,23 +37,26 @@
                     <ul class="navbar-nav">
                         <!-- Notifications -->
                         <li class="nav-item">
-                            <a class="nav-link text-white position-relative" href="#">
+                            <a class="nav-link text-white position-relative" href="{{ route('notifications.index') }}">
                                 <i class="fas fa-bell fa-lg"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5+</span>
+                                @if(auth()->user()->unreadNotifications->count() > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ auth()->user()->unreadNotifications->count() }}
+                                    </span>
+                                @endif
                             </a>
                         </li>
 
                         <!-- User Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                <!-- Display Profile Image if Available, Otherwise Show Default Image -->
-        <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('images/default-profile.png') }}" 
-        alt="Profile" class="rounded-circle me-1" width="35" height="35">
-   <span class="ms-1">{{ Auth::user()->name ?? 'Admin' }}</span>
+                                <img src="{{ Auth::user()->profile_image ? asset('storage/' . Auth::user()->profile_image) : asset('images/default-profile.png') }}" 
+                                alt="Profile" class="rounded-circle me-1" width="35" height="35">
+                                <span class="ms-1">{{ Auth::user()->name ?? 'Tenant' }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{route('profile.edit')}}"><i class="fas fa-user"></i> Profile</a></li>
-                                <li><a class="dropdown-item" href="{{url('/admin/settings')}}"><i class="fas fa-cog"></i> Settings</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-user"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a></li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="fas fa-sign-out-alt"></i> Logout
@@ -65,85 +72,90 @@
             </div>
         </nav>
 
-        <!-- Sidebar & Content Layout -->
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Sidebar -->
-                <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-                    <div class="sidebar-header text-center py-3">
-                        <h4 class="text-white">Admin Dashboard</h4>
-                    </div>
-                    <ul class="list-unstyled px-3">
-                        <li>
-                            <a href="{{route('admin.dashboard')}}" class="sidebar-link active">
-                                <i class="fas fa-chart-line"></i> Dashboard Overview
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('admin.properties.index')}}" class="sidebar-link">
-                                <i class="fas fa-building"></i> Manage Properties
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('admin.users.index')}}" class="sidebar-link">
-                                <i class="fas fa-users"></i> User Management
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('admin.rental-applications.index')}}" class="sidebar-link">
-                                <i class="fas fa-file-signature"></i> Rental Applications
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('admin.reviews.index')}}" class="sidebar-link">
-                                <i class="fas fa-comments"></i> Reviews & Feedback
-                            </a>
-                        </li>
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-                        <li>
-                            <a href="{{route('admin.activities.index')}}" class="sidebar-link">
-                                <i class="fas fa-clock"></i> Activity Log
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" class="sidebar-link">
-                                <i class="fas fa-wallet"></i> Payments & Transactions
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="sidebar-link">
-                                <i class="fas fa-chart-pie"></i> Reports & Analytics
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{url('/admin/settings')}}" class="sidebar-link">
-                                <i class="fas fa-cogs"></i> Settings
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-
-                <!-- Main Content -->
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                    @yield('content')
-                </main>
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header text-center py-3">
+                <h4 class="text-white" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <i class="fas fa-user-shield" style="font-size: 24px; margin-bottom: 4px;"></i>
+                    Admin Panel
+                </h4>
+                
+                
             </div>
-        </div>
+            <ul class="list-unstyled px-3 nav flex-column">
+                <li><a href="{{ route('admin.dashboard') }}" class="sidebar-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="{{ route('admin.properties.index') }}" class="sidebar-link {{ Request::routeIs('admin.properties.index') ? 'active' : '' }}"><i class="fas fa-building"></i> Manage Properties</a></li>
+                <li><a href="{{ route('admin.users.index') }}" class="sidebar-link {{ Request::routeIs('admin.users.index') ? 'active' : '' }}"><i class="fas fa-users"></i> User Management</a></li>
+                <li><a href="{{ route('admin.rental-applications.index') }}" class="sidebar-link {{ Request::routeIs('admin.rental-applications.index') ? 'active' : '' }}"><i class="fas fa-file-signature"></i> Rental Applications</a></li>
+                <li><a href="{{ route('admin.reviews.index') }}" class="sidebar-link {{ Request::routeIs('admin.reviews.index') ? 'active' : '' }}"><i class="fas fa-comments"></i> Reviews</a></li>
+                <li><a href="{{ route('admin.activities.index') }}" class="sidebar-link {{ Request::routeIs('admin.activities.index') ? 'active' : '' }}"><i class="fas fa-clock"></i> Activity Log</a></li>
+                <li><a href="#" class="sidebar-link"><i class="fas fa-wallet"></i> Payments</a></li>
+                <li><a href="#" class="sidebar-link"><i class="fas fa-chart-pie"></i> Reports</a></li>
+                <li><a href="{{ url('/admin/settings') }}" class="sidebar-link {{ Request::routeIs('admin.settings') ? 'active' : '' }}"><i class="fas fa-cogs"></i> Settings</a></li>
+           
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            @yield('content')
+        </main>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            // Function to toggle sidebar
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            }
+            
+            // Toggle sidebar when button is clicked
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            
+            // Close sidebar when clicking on overlay
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+            
+            // Close sidebar when window is resized to larger size
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    mainContent.style.marginLeft = "250px";
+                } else {
+                    mainContent.style.marginLeft = "0";
+                }
+            });
+            
+            // Close sidebar when clicking on a link (mobile only)
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 768) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Initialize correct layout based on screen size
+            if (window.innerWidth >= 768) {
+                mainContent.style.marginLeft = "250px";
+            } else {
+                mainContent.style.marginLeft = "0";
+            }
+        });
+    </script>
 </body>
-
-<button class="btn btn-warning d-lg-none" onclick="toggleSidebar()">
-    <i class="fas fa-bars"></i> Menu
-</button>
-
-<script>
-function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('active');
-}
-</script>
-
 </html>

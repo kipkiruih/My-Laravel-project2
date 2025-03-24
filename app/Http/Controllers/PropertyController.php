@@ -16,28 +16,33 @@ class PropertyController extends Controller
     {
         // Fetch search and filter inputs
         $search = $request->input('search');
-        $property_type = $request->input('type');
+        $propertyType = $request->input('type');
         $location = $request->input('location');
-
-        // Query properties with filters
-        $properties = Property::when($search, function ($query, $search) {
-                return $query->where('title', 'LIKE', "%{$search}%");
+    
+        // Query properties with filters and eager load ratings
+        $properties = Property::with('ratings')
+            ->when($search, function ($query, $search) {
+                return $query->whereRaw('LOWER(title) LIKE ?', ["%".strtolower($search)."%"]);
             })
-            ->when($property_type, function ($query, $property_type) {
-                return $query->where('category', $property_type);
+            ->when($propertyType, function ($query, $propertyType) {
+                return $query->where('category', $propertyType);
             })
             ->when($location, function ($query, $location) {
-                return $query->where('location', 'LIKE', "%{$location}%");
+                return $query->whereRaw('LOWER(location) LIKE ?', ["%".strtolower($location)."%"]);
             })
             ->latest()
-            ->paginate(9); // Paginate results
-            $bookmarkedProperties = [];
-            if (auth()->check() && auth()->user()->role === 'tenant') {
-                $bookmarkedProperties = auth()->user()->bookmarks->pluck('property_id')->toArray();
-            }
-        
-            return view('properties.index', compact('properties', 'bookmarkedProperties'));
+            ->paginate(9)
+            ->withQueryString(); // Keep filters in pagination
+    
+        // Fetch bookmarked properties for authenticated tenants
+        $bookmarkedProperties = auth()->check() && auth()->user()->role === 'tenant'
+            ? auth()->user()->bookmarks()->pluck('property_id')->toArray()
+            : [];
+    
+        return view('properties.index', compact('properties', 'bookmarkedProperties'));
     }
+    
+    
 
     /**
      * Display a single property.
@@ -70,4 +75,6 @@ class PropertyController extends Controller
     $properties = Property::latest()->take(6)->get(); // Get latest 6 properties
         return view('home', compact('properties'));
     }*/
+
+    
 }

@@ -6,8 +6,13 @@
     <title>Bingwa Homes</title>
 
     <!--<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">-->
-    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+
        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+       <!-- jQuery (Required for Bootstrap JavaScript) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JavaScript -->
 
        @vite(['resources/css/app.css','resources/js/app.js'])
 
@@ -24,12 +29,29 @@
             text-align: center;
             margin-top: 20px;
         }
+         /* Active link */
+    .nav-link.active, .nav-link:hover {
+        color: #2ECC71 !important; /* Gold hover effect */
+        border-bottom: 3px solid #F4A62A; /* Gold underline */
+    }
+
+    /* Dropdown menu styling */
+    .dropdown-menu {
+        background-color: #FFFFFF; /* White dropdown */
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dropdown item hover */
+    .dropdown-item:hover {
+        background-color: #F4A62A;
+        color: #FFFFFF !important;
+    }
     </style>
 
 </head>
-<body>
+<body >
 
-    <!-- Navbar -->
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-white shadow-sm">
     <div class="container">
@@ -48,9 +70,7 @@
                 </li>
 
                
-
-            
-                @guest
+               @guest
 
                 
 
@@ -122,34 +142,11 @@
                     </li>
                 @endguest
             </ul>
+           
+            
         </div>
     </div>
 </nav>
-
-<!-- Custom Navbar Styles -->
-<style>
-    /* Active link */
-    .nav-link.active, .nav-link:hover {
-        color: #2ECC71 !important; /* Gold hover effect */
-        border-bottom: 3px solid #F4A62A; /* Gold underline */
-    }
-
-    /* Dropdown menu styling */
-    .dropdown-menu {
-        background-color: #FFFFFF; /* White dropdown */
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Dropdown item hover */
-    .dropdown-item:hover {
-        background-color: #F4A62A;
-        color: #FFFFFF !important;
-    }
-</style>
-
-
-
 
     <!-- Main Content -->
     <main class="container mt-4">
@@ -161,5 +158,5 @@
         <p>&copy; {{ date('Y') }} Bingwa Homes. All Rights Reserved.</p>
     </footer>
 
-    
+</body>
 </html>

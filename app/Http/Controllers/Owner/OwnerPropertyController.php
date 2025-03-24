@@ -6,6 +6,7 @@ use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ActivityLog;
 
 
 class OwnerPropertyController extends Controller
@@ -58,6 +59,7 @@ class OwnerPropertyController extends Controller
             'status' => $request->status,
             'image' => $imagePath,
         ]);
+        ActivityLog::log('Created Property', 'A new property was added by Owner #' . auth()->id());
 
         return redirect()->route('owner.properties.index')->with('success', 'Property added successfully.');
     } catch (\Exception $e) {
