@@ -33,6 +33,7 @@
                             <th><i class="fas fa-phone"></i> Phone</th>
                             <th><i class="fas fa-user-tag"></i> Role</th>
                             <th><i class="fas fa-toggle-on"></i> Status</th>
+                            <th><i class="fas fa-user-slash"></i> Account</th>
                             <th><i class="fas fa-tools"></i> Actions</th>
                         </tr>
                     </thead>
@@ -53,11 +54,22 @@
                                 </span>
                             </td>
                             <td>
+                                @if($user->is_deactivated)
+                                <span class="badge text-white" style="background-color: #E74C3C;">
+                                    <i class="fas fa-user-slash"></i> Deactivated
+                                </span>
+                            @else
+                                <span class="badge text-white" style="background-color: #2ECC71;">
+                                    <i class="fas fa-user-check"></i> Active
+                                </span>
+                            @endif
+                            </td>
+                            <td>
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm" 
                                     style="background-color: #F4A62A; color: white;" data-toggle="tooltip" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-
+                            
                                 @if($user->status != 'approved')
                                     <form action="{{ route('admin.users.approve', $user->id) }}" method="POST" class="d-inline">
                                         @csrf
@@ -67,7 +79,7 @@
                                         </button>
                                     </form>
                                 @endif
-
+                            
                                 @if($user->status != 'suspended')
                                     <form action="{{ route('admin.users.suspend', $user->id) }}" method="POST" class="d-inline">
                                         @csrf
@@ -77,7 +89,7 @@
                                         </button>
                                     </form>
                                 @endif
-
+                            
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?');">
                                     @csrf
                                     @method('DELETE')
@@ -86,7 +98,17 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
+                            
+                                @if($user->is_deactivated)
+                                    <form action="{{ route('admin.activate.user', $user->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" title="Reactivate">
+                                            <i class="fas fa-user-check"></i> Reactivate
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
+                            
                         </tr>
                         @endforeach
                     </tbody>

@@ -60,4 +60,17 @@ public function downloadInvoice($id)
     return $pdf->download('invoice_' . $payment->id . '.pdf');
 }
 
+public function requestReactivation()
+{
+    $user = Auth::user();
+
+    if (!$user->is_deactivated) {
+        return redirect()->back()->with('info', 'Your account is already active.');
+    }
+
+    // Notify the admin (optional: log the request)
+    \Log::info("Reactivation request from: {$user->email}");
+
+    return redirect()->back()->with('success', 'Reactivation request sent. Please wait for admin approval.');
+}
 }

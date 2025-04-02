@@ -29,21 +29,34 @@ class MaintenanceRequestController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|string|max:255' // Ensure valid input
-        ]);
-    
-        $maintenanceRequest = MaintenanceRequest::whereHas('property', function ($query) {
-            $query->where('owner_id', Auth::id());
-        })->findOrFail($id);
-    
-        $maintenanceRequest->update([
-            'status' => trim($request->status) // Ensure it's a string
-        ]);
-    
-        return redirect()->route('owner.maintenance.index')->with('success', 'Maintenance request updated successfully.');
+{
+    $request->validate([
+        'status' => 'required|string|max:255'
+    ]);
+
+    // Define valid statuses matching ENUM values
+    $validStatuses = [
+        'Pending' => 'Pending',
+        'in_progress' => 'In Progress',
+        'completed' => 'Completed'
+    ];
+
+    // Ensure the status exists in ENUM values
+    if (!array_key_exists($request->status, $validStatuses)) {
+        return back()->withErrors(['status' => 'Invalid status value']);
     }
-    
+
+    $maintenanceRequest = MaintenanceRequest::whereHas('property', function ($query) {
+        $query->where('owner_id', Auth::id());
+    })->findOrFail($id);
+
+    // Update the status with the correct ENUM format
+    $maintenanceRequest->update([
+        'status' => $validStatuses[$request->status]
+    ]);
+
+    return redirect()->route('owner.maintenance.index')->with('success', 'Maintenance request updated successfully.');
+}
+
     
 }

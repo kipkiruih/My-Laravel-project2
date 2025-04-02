@@ -48,7 +48,7 @@
                     </select>
                 </div>
 
-                <button type="button" class="btn w-100 next-btn" style="background-color: #2ECC71; color: white;">Next</button>
+                <button type="button" class="btn next-btn w-100">Next</button>
             </div>
 
             <!-- Step 2: Profile & Password Setup -->
@@ -58,7 +58,7 @@
                     <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
                 </div>
 
-                <div class="mb-3 position-relative">
+                <div class="mb-3">
                     <label for="password" class="form-label"><i class="fas fa-lock"></i> Password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="password" name="password" required placeholder="Enter password">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3 position-relative">
+                <div class="mb-3">
                     <label for="password_confirmation" class="form-label"><i class="fas fa-lock"></i> Confirm Password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required placeholder="Confirm password">
@@ -78,46 +78,134 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn w-100 back-btn" style="background-color: #7F8C8D; color: white;">Back</button>
-                <button type="submit" class="btn w-100 mt-2" style="background-color: #F4A62A; color: white;">Register</button>
+                <button type="button" class="btn back-btn w-100">Back</button>
+                <button type="submit" class="btn submit-btn w-100 mt-2">Register</button>
+                <div class="text-center mt-3">
+                    <p>Already have an account? <a href="{{ route('login') }}" class="login-link">Login here</a></p>
+                    <style>
+                        /* Login Link Styling */
+                        .login-link {
+                            color: #2C3E50;
+                            font-weight: bold;
+                            text-decoration: none;
+                            transition: color 0.3s ease;
+                        }
+                        
+                        .login-link:hover {
+                            color: #F4A62A;
+                            text-decoration: underline;
+                        }
+                        </style>
+                        
+                </div>
+                
             </div>
         </form>
     </div>
 </div>
 
+<style>
+/* General Styling */
+body {
+    background-color: #F8F9FA;
+}
+
+.card {
+    border: none;
+}
+
+/* Form Fields */
+.form-control, .form-select {
+    border: 2px solid #7F8C8D;
+    border-radius: 5px;
+    padding: 8px;
+    color: #2C3E50;
+    background-color: white;
+}
+
+/* Focus Effect */
+.form-control:focus, .form-select:focus {
+    border-color: #2C3E50;
+    box-shadow: 0 0 5px rgba(44, 62, 80, 0.5);
+}
+
+/* Progress Bar */
+.progress-bar {
+    background-color: #F4A62A;
+    font-weight: bold;
+    color: white;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.next-btn, .submit-btn {
+    background-color: #2C3E50;
+    color: white;
+}
+
+.next-btn:hover, .submit-btn:hover {
+    background-color: #2ECC71;
+    transform: scale(1.02);
+}
+
+.back-btn {
+    background-color: #7F8C8D;
+    color: white;
+}
+
+.back-btn:hover {
+    background-color: #2C3E50;
+}
+
+/* Password Visibility Toggle */
+.btn-outline-secondary {
+    border-color: #2C3E50;
+    color: #2C3E50;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #2C3E50;
+    color: white;
+}
+</style>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let step1 = document.getElementById("step-1");
-        let step2 = document.getElementById("step-2");
-        let progressBar = document.getElementById("progress-bar");
+document.addEventListener("DOMContentLoaded", function() {
+    let step1 = document.getElementById("step-1");
+    let step2 = document.getElementById("step-2");
+    let progressBar = document.getElementById("progress-bar");
 
-        document.querySelector(".next-btn").addEventListener("click", function() {
-            step1.style.display = "none";
-            step2.style.display = "block";
-            progressBar.style.width = "100%";
-            progressBar.textContent = "Step 2 of 2";
-        });
+    document.querySelector(".next-btn").addEventListener("click", function() {
+        step1.style.display = "none";
+        step2.style.display = "block";
+        progressBar.style.width = "100%";
+        progressBar.textContent = "Step 2 of 2";
+    });
 
-        document.querySelector(".back-btn").addEventListener("click", function() {
-            step1.style.display = "block";
-            step2.style.display = "none";
-            progressBar.style.width = "50%";
-            progressBar.textContent = "Step 1 of 2";
-        });
+    document.querySelector(".back-btn").addEventListener("click", function() {
+        step1.style.display = "block";
+        step2.style.display = "none";
+        progressBar.style.width = "50%";
+        progressBar.textContent = "Step 1 of 2";
+    });
 
-        document.querySelectorAll('.toggle-password').forEach(button => {
-            button.addEventListener('click', function () {
-                let input = this.previousElementSibling;
-                if (input.type === "password") {
-                    input.type = "text";
-                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                } else {
-                    input.type = "password";
-                    this.innerHTML = '<i class="fas fa-eye"></i>';
-                }
-            });
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function () {
+            let input = this.previousElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                input.type = "password";
+                this.innerHTML = '<i class="fas fa-eye"></i>';
+            }
         });
     });
+});
 </script>
-
 @endsection

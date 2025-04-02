@@ -9,7 +9,12 @@
                     <i class="fas fa-lock"></i> Reset Password
                 </div>
                 <div class="card-body p-4">
-                    <form method="POST" action="{{ route('password.update') }}">
+                    @if (session('status'))
+                        <div class="alert alert-success">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    <form method="POST" action="{{ route('password.update') }}" onsubmit="return validatePassword()">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
 
@@ -23,9 +28,16 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Password Field with Visibility Toggle -->
+                        <div class="mb-3 position-relative">
                             <label for="password" class="form-label fw-bold text-dark">New Password</label>
-                            <input id="password" type="password" class="form-control border-secondary @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                            <div class="input-group">
+                                <input id="password" type="password" class="form-control border-secondary @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password', 'togglePasswordIcon')">
+                                    <i id="togglePasswordIcon" class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small id="passwordHelp" class="text-danger"></small>
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -33,9 +45,15 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Confirm Password Field with Visibility Toggle -->
+                        <div class="mb-3 position-relative">
                             <label for="password-confirm" class="form-label fw-bold text-dark">Confirm Password</label>
-                            <input id="password-confirm" type="password" class="form-control border-secondary" name="password_confirmation" required autocomplete="new-password">
+                            <div class="input-group">
+                                <input id="password-confirm" type="password" class="form-control border-secondary" name="password_confirmation" required autocomplete="new-password">
+                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password-confirm', 'toggleConfirmPasswordIcon')">
+                                    <i id="toggleConfirmPasswordIcon" class="fas fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="d-grid">
@@ -49,4 +67,57 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript for Password Strength and Visibility -->
+<script>
+function togglePassword(fieldId, iconId) {
+    let passwordField = document.getElementById(fieldId);
+    let icon = document.getElementById(iconId);
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+
+document.getElementById('password').addEventListener('input', function () {
+    let password = this.value;
+    let message = '';
+
+    if (password.length < 8) {
+        message = 'Password must be at least 8 characters.';
+    } else if (!/[A-Z]/.test(password)) {
+        message = 'Include at least one uppercase letter.';
+    } else if (!/[a-z]/.test(password)) {
+        message = 'Include at least one lowercase letter.';
+    } else if (!/\d/.test(password)) {
+        message = 'Include at least one number.';
+    } else if (!/[@$!%*?&]/.test(password)) {
+        message = 'Include at least one special character (@$!%*?&).';
+    } else {
+        message = 'Strong password!';
+        document.getElementById('passwordHelp').classList.remove('text-danger');
+        document.getElementById('passwordHelp').classList.add('text-success');
+    }
+
+    document.getElementById('passwordHelp').textContent = message;
+});
+
+function validatePassword() {
+    let password = document.getElementById('password').value;
+    let message = '';
+
+    if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password) || !/[@$!%*?&]/.test(password)) {
+        alert('Your password does not meet the required strength criteria.');
+        return false;
+    }
+    return true;
+}
+</script>
+
 @endsection

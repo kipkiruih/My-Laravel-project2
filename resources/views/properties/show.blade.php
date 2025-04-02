@@ -124,21 +124,67 @@
             <p class="text-muted"><i class="fas fa-map-marker-alt text-danger"></i> {{ $property->location }}</p>
             <p class="fw-bold text-dark">Ksh {{ number_format($property->price, 2) }}</p>
             <p class="text-secondary">{{ $property->description }}</p>
+      
 
-            <!-- Contact Owner Button -->
-            <a href="{{ optional($property->owner)->phone ? 'tel:' . $property->owner->phone : '#' }}" 
-               class="btn text-white contact-owner-btn {{ $property->owner ? '' : 'disabled' }}">
-                <i class="fas fa-phone"></i> Contact Owner
-            </a>
+            <div class="owner-info mt-4">
+                <h4 class="heading-style"><i class="fas fa-user"></i> Property Owner Details</h4>
+                <div class="d-flex align-items-center">
+                    <img src="{{ optional($property->owner)->profile_image ? asset('storage/' . $property->owner->profile_image) : asset('images/default-user.png') }}" 
+                         alt="Owner Profile" class="reviewer-img">
+                    <div class="ms-3">
+                        <p class="mb-1"><strong>Name:</strong> {{ optional($property->owner)->name ?? 'N/A' }}</p>
+                        <p class="mb-1"><strong>Verification:</strong> 
+                            {!! optional($property->owner)->status ? '<span class="badge bg-success">Verified</span>' : '<span class="badge bg-danger">Not Verified</span>' !!}
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-            <!-- Bookmark Button -->
-            <form action="{{ route('tenant.bookmarks.store') }}" method="POST" class="d-inline">
-                @csrf
-                <input type="hidden" name="property_id" value="{{ $property->id }}">
-                <button type="submit" class="btn bookmark-btn">
-                    <i class="fas fa-bookmark"></i> {{ $isBookmarked ? 'Remove Bookmark' : 'Bookmark' }}
-                </button>
-            </form>
+            <a href="{{ optional($property->owner)->phone ? 'https://wa.me/' . str_replace('+', '', $property->owner->phone) . '?text=Hello,%20I%20am%20interested%20in%20your%20property%20(' . urlencode($property->title) . ').%20Is%20it%20still%20available?' : '#' }}" 
+                class="btn text-white contact-owner-btn {{ $property->owner ? '' : 'disabled' }}" 
+                target="_blank">
+                 <i class="fab fa-whatsapp"></i> Whatsapp Me
+             </a>
+            <h4 class="mt-4 heading-style"><i class="fas fa-envelope"></i> Contact Property Owner</h4>
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            
+            @if(auth()->check())
+                <div class="review-form-container">
+                    <form action="{{ route('property.contact', $property->id) }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name:</label>
+                            <input type="text" name="name" class="form-control form-input" required value="{{ auth()->user()->name }}">
+                        </div>
+            
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email:</label>
+                            <input type="email" name="email" class="form-control form-input" required value="{{ auth()->user()->email }}">
+                        </div>
+            
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Your Phone:</label>
+                            <input type="text" name="phone" class="form-control form-input" required>
+                        </div>
+            
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message:</label>
+                            <textarea name="message" rows="4" class="form-control form-input" required placeholder="Enter your message..."></textarea>
+                        </div>
+            
+                        <button type="submit" class="btn submit-btn w-100"><i class="fas fa-paper-plane"></i> Send Message</button>
+                    </form>
+                </div>
+            @else
+                <p class="text-danger"><i class="fas fa-info-circle"></i> Please <a href="{{ route('login') }}">log in</a> to contact the owner.</p>
+            @endif
+                        
+            
         </div>
     </div>
 

@@ -24,6 +24,10 @@ class User extends Authenticatable
         'phone',
         'role',
         'profile_image',
+        'deactivated_at',
+        'status',
+        'email_verified_at',
+        'remember_token',
     ];
 
     /**
@@ -86,6 +90,9 @@ public function reviews()
 {
     return $this->hasMany(Review::class);
 }
-
+public function isDeactivated(): bool
+    {
+        return !is_null($this->deactivated_at);
+    }
 
 }

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\Bookmark;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Favorite;
 
 class PropertyController extends Controller
 {
@@ -38,8 +39,11 @@ class PropertyController extends Controller
         $bookmarkedProperties = auth()->check() && auth()->user()->role === 'tenant'
             ? auth()->user()->bookmarks()->pluck('property_id')->toArray()
             : [];
+
+            $favoritedProperties = Favorite::where('tenant_id', auth()->id())->pluck('property_id')->toArray();
+
     
-        return view('properties.index', compact('properties', 'bookmarkedProperties'));
+        return view('properties.index', compact('properties', 'bookmarkedProperties','favoritedProperties'));
     }
     
     
@@ -62,9 +66,11 @@ class PropertyController extends Controller
             $isBookmarked = Bookmark::where('tenant_id', Auth::id())
                             ->where('property_id', $id)
                             ->exists();
+                            $favoritedProperties = Favorite::where('tenant_id', auth()->id())->pluck('property_id')->toArray();
+
         }
 
-        return view('properties.show', compact('property', 'isBookmarked'));
+        return view('properties.show', compact('property', 'isBookmarked','favoritedProperties'));
     }
 
     /**

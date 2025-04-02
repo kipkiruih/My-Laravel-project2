@@ -31,5 +31,6 @@ class FavoriteController extends Controller
         Favorite::where('tenant_id', auth()->id())->where('property_id', $id)->delete();
         return back()->with('success', 'Property removed from favorites.');
     }
+    
 }
 

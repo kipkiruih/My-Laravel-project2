@@ -23,4 +23,5 @@ class AdminDashboardController extends Controller
         return view('admin.dashboard',compact('totalProperties','totalUsers','pendingApplications','totalPayments'));
     }
 
+    
 }

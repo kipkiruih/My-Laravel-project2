@@ -120,16 +120,7 @@
                         <i class="fas fa-tools"></i> Maintenance Requests
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('notifications.index') }}" class="sidebar-link position-relative {{ Request::routeIs('notifications.index') ? 'active' : '' }}">
-                        <i class="fas fa-bell"></i> Notifications
-                        @if(auth()->user()->unreadNotifications->count() > 0)
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ auth()->user()->unreadNotifications->count() }}
-                            </span>
-                        @endif
-                    </a>
-                </li>
+                
                 <li>
                     <a href="{{ route('profile.edit') }}" class="sidebar-link {{ Request::routeIs('profile.edit') ? 'active' : '' }}">
                         <i class="fas fa-user-circle"></i> Profile Management
@@ -140,6 +131,36 @@
                         <i class="fas fa-wallet"></i> Payments & Rental History
                     </a>
                 </li>
+
+                
+                
+           <!-- Account Settings Collapsible -->
+<li class="nav-item">
+    <a class="sidebar-link d-flex align-items-center justify-content-between" href="#" data-bs-toggle="collapse" data-bs-target="#accountSettingsMenu">
+        <span><i class="fas fa-user-cog"></i> Account Settings</span>
+        <i class="fas fa-chevron-down"></i>
+    </a>
+    <div class="collapse" id="accountSettingsMenu">
+        <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+                <a class="sidebar-link" href="{{ route('loginActivity') }}">
+                    <i class="fas fa-history"></i> Login Activity
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-link" href="{{ route('changePassword') }}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="sidbar-link " href="{{ route('account.deactivatePage') }}">
+                    <i class="fas fa-user-slash"></i> Deactivate Account
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+
             </ul>
         </nav>
 

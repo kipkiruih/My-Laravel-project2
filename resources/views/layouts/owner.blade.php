@@ -89,11 +89,52 @@
                 <li><a href="{{ route('owner.properties.index') }}" class="sidebar-link {{ request()->routeIs('owner.properties.index') ? 'active' : '' }}"><i class="fas fa-home"></i> My Properties</a></li>
                 <li><a href="{{ route('owner.properties.create') }}" class="sidebar-link {{ request()->routeIs('owner.properties.create') ? 'active' : '' }}"><i class="fas fa-plus-circle"></i> Add New Property</a></li>
                 <li><a href="{{ route('owner.tenants.index') }}" class="sidebar-link {{ request()->routeIs('owner.tenants.index') ? 'active' : '' }}"><i class="fas fa-users"></i> Manage Tenants</a></li>
+                <li><a href="{{ route('owner.maintenance.index') }}" class="sidebar-link {{ request()->routeIs('owner.maintenance.index') ? 'active' : '' }}"><i class="fas fa-tools"></i> Maintenance Requests</a></li>
+                <li><a href="{{ route('owner.rental_applications.index')}}" class="sidebar-link {{request()->routeIs('owner.rental_applications.index') ? 'active': ''}}"><i class="fas fa-file-alt  "></i>  Rental Applications </a></li>
+
                 <li><a href="#" class="sidebar-link"><i class="fas fa-comments"></i> Reviews & Feedback</a></li>
                 <li><a href="{{ route('owner.payments') }}" class="sidebar-link {{ request()->routeIs('owner.payments') ? 'active' : '' }}"><i class="fas fa-file-invoice-dollar"></i> Rental Payments</a></li>
                 <li><a href="#" class="sidebar-link"><i class="fas fa-chart-line"></i> Earnings & Reports</a></li>
-                <li><a href="#" class="sidebar-link"><i class="fas fa-cogs"></i> Account Settings</a></li>
-           
+                <li>
+                    <a href="{{ route('changePassword') }}" class="sidebar-link {{ request()->routeIs('changePassword') ? 'active' : '' }}">
+                        <i class="fas fa-key"></i> Change Password
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('loginActivity') }}" class="sidebar-link">
+                        <i class="fas fa-history"></i> Login Activity
+                    </a>
+                </li>
+                <li>
+                    
+                           <!-- Account Settings Collapsible -->
+<li class="nav-item">
+    <a class="sidebar-link d-flex align-items-center justify-content-between" href="#" data-bs-toggle="collapse" data-bs-target="#accountSettingsMenu">
+        <span><i class="fas fa-user-cog"></i> Account Settings</span>
+        <i class="fas fa-chevron-down"></i>
+    </a>
+    <div class="collapse" id="accountSettingsMenu">
+        <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+                <a class="sidebar-link" href="{{ route('loginActivity') }}">
+                    <i class="fas fa-history"></i> Login Activity
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-link" href="{{ route('changePassword') }}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="sidbar-link " href="{{ route('account.deactivatePage') }}">
+                    <i class="fas fa-user-slash"></i> Deactivate Account
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+                
+                           
             </ul>
         </nav>
 

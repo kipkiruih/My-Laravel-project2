@@ -1,9 +1,15 @@
 @extends('layouts.tenant')
 
 @section('content')
+@if (session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
 <div class="container-fluid mt-4">
     <div class="row">
 <!-- Overview Section -->
+
 <div class="row">
     <div class="col-md-3">
         <div class="card shadow h-100" style="background-color: #2C3E50; color: #FFFFFF;">

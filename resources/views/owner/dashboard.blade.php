@@ -1,11 +1,23 @@
 @extends('layouts.owner')
 @section('content')
+@if(Auth::user()->is_deactivated)
+    <div class="alert alert-warning">
+        Your account is deactivated. Contact support to reactivate.
+    </div>
+@endif
+@if (session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
+
 
 <!-- Main Content -->
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     <div class="container mt-4">
         <h2 class="mb-4 text-dark">Welcome, {{ Auth::user()->name ?? 'Owner' }}</h2>
-
+        
+        
       <!-- Dashboard Overview Cards -->
 <div class="row">
     <div class="col-md-4">

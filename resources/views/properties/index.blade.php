@@ -133,21 +133,42 @@
                         <p class="text-success fw-bold"><i class="fas fa-dollar-sign"></i> Ksh {{ number_format($property->price, 2) }}</p>
 
                         <div class="d-flex justify-content-between align-items-center">
-                            <form action="{{ route('tenant.bookmarks.store') }}" method="POST">
+                            <form action="{{ in_array($property->id, $bookmarkedProperties ?? []) 
+                                ? route('tenant.bookmarks.destroy', $property->id) 
+                                : route('tenant.bookmarks.store') }}" 
+                                method="POST">
+                                
                                 @csrf
+                                @if (in_array($property->id, $bookmarkedProperties ?? []))
+                                    @method('DELETE')
+                                @endif
+                                
                                 <input type="hidden" name="property_id" value="{{ $property->id }}">
-                                @php
-                                    $isBookmarked = in_array($property->id, $bookmarkedProperties ?? []);
-                                @endphp
-                                <button type="submit" class="btn btn-warning">
-                                    <i class="fas fa-bookmark"></i> {{ $isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+                                <button type="submit" class="btn {{ in_array($property->id, $bookmarkedProperties ?? []) ? 'btn-outline-primary' : 'btn-warning' }}">
+                                    <i class="fas fa-bookmark"></i> 
+                                    {{ in_array($property->id, $bookmarkedProperties ?? []) ? 'Bookmarked' : 'Bookmark' }}
                                 </button>
                             </form>
-                            <form action="{{ route('tenant.favorites.store') }}" method="POST">
+                            
+                            
+                            <form action="{{ in_array($property->id, $favoritedProperties ?? []) 
+                                ? route('tenant.favorites.destroy', $property->id) 
+                                : route('tenant.favorites.store') }}" 
+                                method="POST">
                                 @csrf
-                                <input type="hidden" name="property_id" value="{{ $property->id }}">
-                                <button class="btn btn-outline-primary"><i class="fas fa-heart"></i> Add to Favorites</button>
+                                @if(in_array($property->id, $favoritedProperties ?? []))
+                                    @method('DELETE') 
+                                    <button class="btn btn-danger">
+                                        <i class="fas fa-heart-broken"></i> Added to Favorites
+                                    </button>
+                                @else
+                                    <input type="hidden" name="property_id" value="{{ $property->id }}">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-heart"></i> Add to Favorites
+                                    </button>
+                                @endif
                             </form>
+                            
                         </div>
 
                         <hr>

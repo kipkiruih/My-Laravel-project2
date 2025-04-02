@@ -57,7 +57,7 @@ class RentalApplicationUpdate extends Notification
             'property' => $this->rentalApplication->property->title ?? 'Unknown Property',
             'status' => $this->status ?? 'Pending',
             'message' => 'Your rental application for ' . ($this->rentalApplication->property->title ?? 'a property') . ' has been ' . strtolower($this->status) . '.',
-            'url' => route('tenant.rental_applications.show', ['id' => $this->rentalApplication->id]),
+            'url' => route('tenant.rental_applications.show', ['rental_application' => $this->rentalApplication->id]),
         ];
     }
 

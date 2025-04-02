@@ -20,6 +20,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MpesaController;
+use App\Http\Controllers\PropertyContactController;
+
 
 Auth::routes();
 
@@ -42,6 +44,8 @@ Route::get('/contact', function () {
 
 Route::post('/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
 
+Route::post('/properties/{property}/contact', [PropertyContactController::class, 'sendMessage'])
+    ->name('property.contact');
 //Route::get('/', [PropertyController::class, 'home']);
 
 Route::get('/blog', [BlogController::class, 'index'])->name('home');
@@ -130,10 +134,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/security-settings', [\App\Http\Controllers\Admin\SecuritySettingsController::class, 'index'])->name('security-settings.index');
     Route::post('/security-settings', [\App\Http\Controllers\Admin\SecuritySettingsController::class, 'update'])->name('security-settings.update');
 
+
+
 });
-
-
-
 Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
     
@@ -160,7 +163,7 @@ Route::get('/owner/payments', [OwnerDashboardController::class, 'payments'])->na
 
 Route::get('/owner/payments/invoice/{id}', [OwnerDashboardController::class, 'downloadInvoice'])
     ->name('downloadInvoice');
-
+   
 });
 Route::middleware(['auth', 'role:tenant'])
     ->prefix('tenant') // Adds "tenant/" before the route URL
@@ -211,3 +214,31 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('review.update');
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('review.destroy');
 });
+
+
+Route::middleware(['auth'])->group(function () {
+    // Show the Change Password Form
+    Route::get('/change-password', [\App\Http\Controllers\SecurityController::class, 'showChangePasswordForm'])->name('changePasswordForm');
+    Route::post('/change-password', [\App\Http\Controllers\SecurityController::class, 'changePassword'])->name('changePassword');
+    Route::get('/login-activity', [\App\Http\Controllers\LoginActivityController::class, 'index'])->name('loginActivity');
+
+    // Show Deactivation Page
+
+   
+});
+Route::middleware('auth')->group(function () {
+    Route::post('/account/deactivate', [\App\Http\Controllers\AccountController::class, 'deactivate'])->name('account.deactivate');
+    Route::get('/account/deactivate', [\App\Http\Controllers\AccountController::class, 'showDeactivatePage'])->name('account.deactivatePage'); // Show page
+    // Route::post('/account/reactivate', [\App\Http\Controllers\AccountController::class, 'reactivate'])->name('account.reactivate');
+
+
+
+});
+
+Route::get('/account/reactivate', function () {
+    return view('auth.reactivate');
+})->name('account.reactivate.form');
+Route::post('/account/reactivate', [\App\Http\Controllers\AccountController::class, 'reactivate'])->name('account.reactivate');
+
+
+
